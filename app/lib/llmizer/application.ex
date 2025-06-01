@@ -11,8 +11,7 @@ defmodule Llmizer.Application do
       LlmizerWeb.Telemetry,
       Llmizer.Repo,
       {Ecto.Migrator,
-        repos: Application.fetch_env!(:llmizer, :ecto_repos),
-        skip: skip_migrations?()},
+       repos: Application.fetch_env!(:llmizer, :ecto_repos), skip: skip_migrations?()},
       {DNSCluster, query: Application.get_env(:llmizer, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: Llmizer.PubSub},
       # Start the Finch HTTP client for sending emails

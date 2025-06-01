@@ -17,7 +17,8 @@ defmodule LlmizerWeb.Router do
   scope "/", LlmizerWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    live "/", ChatsLive, :home
+    live "/chats/:chat_id", ChatsLive, :show
   end
 
   # Other scopes may use custom stacks.
