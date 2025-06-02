@@ -1,0 +1,14 @@
+<div>Your chats</div>
+
+<div>
+  <%= if @chat do %>
+    <div>
+      <h2>{@chat.name}</h2>
+      <ul>
+        <%= for message <- @chat.chat_messages do %>
+          <li><strong>{message.role}:</strong> {message.content}</li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+</div>

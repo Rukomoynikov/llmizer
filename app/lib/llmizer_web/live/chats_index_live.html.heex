@@ -1,0 +1,13 @@
+<div>Your chats</div>
+<.live_component module={LlmizerWeb.ChatFormComponent} id="new_chat_form" form={@form} />
+<div>
+  <%= if @chats && Enum.any?(@chats) do %>
+    <ul>
+      <%= for chat <- @chats do %>
+        <li>{chat.name}</li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>No chats available.</p>
+  <% end %>
+</div>
