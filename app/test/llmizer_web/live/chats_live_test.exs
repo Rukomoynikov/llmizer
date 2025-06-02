@@ -12,7 +12,16 @@ defmodule LlmizerWeb.ChatsLiveTest do
     end
   end
 
-  describe "GET /index/:id" do
+  describe "POST /chats" do
+    test "creates one chat", %{conn: conn} do
+      conn = post(conn, ~p"/chats", chat_message: %{content: "New Chat"})
+      assert redirected_to(conn) == ~p"/chats/1"
+
+      assert Chats.get_chat!(1).name == "New Chat"
+    end
+  end
+
+  describe "GET /chats/:id" do
     test "renders one chat", %{conn: conn} do
       {:ok, chat} = Chats.create_chat(%{name: "Test Chat"})
 

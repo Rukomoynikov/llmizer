@@ -1,13 +1,16 @@
-# defmodule LlmizerWeb.ChatFormComponent do
-#  def form(assigns) do
-#    ~H"""
-#    <%= f = form_for @changeset, "#", [phx_change: :validate, phx_submit: :save] %>
-#      <%= label f, :name %>
-#      <%= text_input f, :name %>
-#      <%= error_tag f, :name %>
-#
-#      <%= submit "Save" %>
-#    </form>
-#    """
-#  end
-# end
+defmodule LlmizerWeb.ChatFormComponent do
+  use LlmizerWeb, :live_component
+
+  def render(assigns) do
+    ~H"""
+    <div>
+      <h2>New Chat Message</h2>
+
+      <.simple_form for={@form} phx-change="validate" phx-submit="save">
+        <.input field={@form[:content]} label="Message"/>
+        <button>Save</button>
+    </.simple_form>
+    </div>
+    """
+  end
+end
