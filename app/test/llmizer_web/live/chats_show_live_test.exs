@@ -1,18 +1,8 @@
-defmodule LlmizerWeb.ChatsLiveTest do
+defmodule LlmizerWeb.ChatsShowLiveTest do
   use LlmizerWeb.ConnCase
   alias Llmizer.Chats
 
-  describe "GET /index" do
-    test "renders list of chats", %{conn: conn} do
-      Chats.create_chat(%{name: "Test Chat"})
-
-      conn = get(conn, ~p"/")
-      assert html_response(conn, 200) =~ "Your chats"
-      assert html_response(conn, 200) =~ "Test Chat"
-    end
-  end
-
-  describe "GET /index/:id" do
+  describe "GET /chats/:id" do
     test "renders one chat", %{conn: conn} do
       {:ok, chat} = Chats.create_chat(%{name: "Test Chat"})
 
