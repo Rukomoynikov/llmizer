@@ -40,3 +40,4 @@ npm-debug.log
 *.db-*
 
 llmizer_dev.db
+llmizer_test.db
