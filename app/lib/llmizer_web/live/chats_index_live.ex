@@ -12,17 +12,22 @@ defmodule LlmizerWeb.ChatsIndexLive do
      socket
      |> assign(:page_title, "Home")
      |> assign(:chats, chats)
-     |> assign(:chat, nil)}
+     |> assign(:chat, nil)
+     |> assign(:form, new_chat_message_changeset())}
   end
 
   @impl true
   def render(assigns) do
     ~H"""
     <div>Your chats</div>
-    <.live_component module={ChatFormComponent} id="new_chat_form" form={new_chat_message_changeset()} />
+    <.live_component module={ChatFormComponent} id="new_chat_form" form={@form} />
     <div>
-      <%= if @chats do %>
-        {chats(assigns)}
+      <%= if @chats && Enum.any?(@chats) do %>
+        <ul>
+          <%= for chat <- @chats do %>
+            <li>{chat.name}</li>
+          <% end %>
+        </ul>
       <% else %>
         <p>No chats available.</p>
       <% end %>
@@ -35,16 +40,6 @@ defmodule LlmizerWeb.ChatsIndexLive do
     {:noreply, socket}
   end
 
-  defp chats(assigns) do
-    ~H"""
-    <ul>
-      <%= for chat <- @chats do %>
-        <li>{chat.name}</li>
-      <% end %>
-    </ul>
-    """
-  end
-
   defp new_chat_message_changeset do
     attrs = %{
       content: "",
@@ -52,26 +47,8 @@ defmodule LlmizerWeb.ChatsIndexLive do
       chat_id: nil
     }
 
-     %Llmizer.Chats.ChatMessage{}
-     |> Llmizer.Chats.ChatMessage.changeset(attrs)
-     |> to_form()
-  end
-
-  @impl true
-  def handle_event("validate", %{"chat_message" => chat_message_params}, socket) do
-    changeset = new_chat_message_changeset()
-    |> Map.put(:params, chat_message_params)
-
-    {:noreply, assign(socket, :form, changeset)}
-  end
-
-  def handle_event("save", %{"chat_message" => chat_message_params}, socket) do
-    case Chats.create_chat_message(chat_message_params) do
-      {:ok, _chat_message} ->
-        {:noreply, socket |> put_flash(:info, "Chat message created successfully.")}
-
-      {:error, changeset} ->
-        {:noreply, assign(socket, :form, changeset)}
-    end
+    %Llmizer.Chats.ChatMessage{}
+    |> Llmizer.Chats.ChatMessage.changeset(attrs)
+    |> to_form()
   end
 end

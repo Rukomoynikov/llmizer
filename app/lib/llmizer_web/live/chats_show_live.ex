@@ -9,10 +9,10 @@ defmodule LlmizerWeb.ChatsShowLive do
     chat = Chats.get_chat!(chat_id)
 
     {:ok,
-      socket
-      |> assign(:page_title, "#{chat.name}}")
-      |> assign(:chats, chats)
-      |> assign(:chat, chat)}
+     socket
+     |> assign(:page_title, "#{chat.name}}")
+     |> assign(:chats, chats)
+     |> assign(:chat, chat)}
   end
 
   @impl true
