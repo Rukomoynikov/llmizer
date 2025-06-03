@@ -1,4 +1,6 @@
 defmodule LlmizerWeb.ChatsShowLiveTest do
+  import Phoenix.LiveViewTest
+
   use LlmizerWeb.ConnCase
   alias Llmizer.Chats
 
@@ -20,6 +22,19 @@ defmodule LlmizerWeb.ChatsShowLiveTest do
 
       assert html_response(conn, 200) =~ "Test Chat"
       assert html_response(conn, 200) =~ message_content
+    end
+  end
+
+  describe "adding message to the chat" do
+    test "if form is filled correctly", %{conn: conn} do
+      {:ok, chat} = Chats.create_chat(%{name: "Test Chat"})
+      {:ok, view, _html} = live(conn, ~p"/chats/#{chat.id}")
+
+      view
+      |> form("#add-message-to-chat", chat_message: %{content: "hello"})
+      |> render_submit()
+
+      assert_redirect(view, ~p"/chats/1")
     end
   end
 end

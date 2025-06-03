@@ -12,11 +12,24 @@ defmodule LlmizerWeb.ChatsShowLive do
      socket
      |> assign(:page_title, "#{chat.name}}")
      |> assign(:chats, chats)
-     |> assign(:chat, chat)}
+     |> assign(:chat, chat)
+     |> assign(:form, new_chat_message_changeset(chat))}
   end
 
   @impl true
   def handle_params(_params, _uri, socket) do
     {:noreply, socket}
+  end
+
+  defp new_chat_message_changeset(chat) do
+    attrs = %{
+      content: "",
+      role: "user",
+      chat_id: chat.id
+    }
+
+    %Llmizer.Chats.ChatMessage{}
+    |> Llmizer.Chats.ChatMessage.changeset(attrs)
+    |> to_form()
   end
 end

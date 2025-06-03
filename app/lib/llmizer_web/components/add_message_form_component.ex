@@ -1,0 +1,34 @@
+defmodule LlmizerWeb.AddMessageFormComponent do
+  use LlmizerWeb, :live_component
+
+  @impl true
+  def render(assigns) do
+    ~H"""
+    <div>
+      <h2>New Chat Message</h2>
+      <.simple_form for={@form} phx-submit="save" phx-target={@myself} id="new-chat-form">
+        <input type="hidden" name="chat_id" value={@form[:chat_id].value} />
+        <.input field={@form[:content]} label="Message" />
+        <button>Save</button>
+      </.simple_form>
+    </div>
+    """
+  end
+
+  @impl true
+  def handle_event(
+        "save",
+        %{"chat_message" => %{"content" => content}, "chat_id" => chat_id},
+        socket
+      ) do
+    case Llmizer.Chats.add_message_to_chat(chat_id, %{question: content}) do
+      {:ok, chat} ->
+        {:noreply,
+         socket
+         |> push_navigate(to: "/chats/#{chat.id}")}
+
+      {:error, changeset} ->
+        {:noreply, assign(socket, :form, to_form(changeset))}
+    end
+  end
+end
