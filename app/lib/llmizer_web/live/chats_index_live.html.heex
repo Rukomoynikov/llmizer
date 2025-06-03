@@ -1,13 +1,22 @@
-<div>Your chats</div>
-<.live_component module={LlmizerWeb.ChatFormComponent} id="new_chat_form" form={@form} />
-<div>
-  <%= if @chats && Enum.any?(@chats) do %>
-    <ul>
-      <%= for chat <- @chats do %>
-        <li>{chat.name}</li>
+<div class="grid grid-cols-2 gap-4 grid-cols-[minmax(200px,300px)_1fr] p-4 min-h-screen">
+  <div class="bg-gray-100 rounded-lg">
+    <div class="overflow-y-auto h-full p-2">
+      <div class="pb-2 font-bold">Chats</div>
+
+      <%= if @chats && Enum.any?(@chats) do %>
+        <div>
+          <%= for chat <- @chats do %>
+              <.link href={~p"/chats/#{chat.id}"} class="block pb-0.5 p-1 hover:border-l-4 hover:border-sky-700 hover:bg-sky-100">{chat.name}</.link>
+          <% end %>
+        </div>
+      <% else %>
+        <p>No chats available.</p>
       <% end %>
-    </ul>
-  <% else %>
-    <p>No chats available.</p>
-  <% end %>
+    </div>
+  </div>
+  <div class="h-full flex items-end">
+    <div class="flex-1">
+      <.live_component module={LlmizerWeb.ChatFormComponent} id="new_chat_form" form={@form} />
+    </div>
+  </div>
 </div>
