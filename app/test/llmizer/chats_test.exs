@@ -57,4 +57,14 @@ defmodule Llmizer.ChatsTest do
       assert chat_message.chat_id == chat.id
     end
   end
+
+  describe "add_message_to_chat/2" do
+    test "attaches a message to the chat" do
+      attrs = %{question: "What is Elixir?"}
+      {:ok, chat} = Chats.create_new_chat(attrs)
+
+      {:ok, chat} = Chats.add_message_to_chat(chat.id, %{question: "What is Phoenix?"})
+      assert length(chat.chat_messages) == 4
+    end
+  end
 end

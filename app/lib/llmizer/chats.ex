@@ -36,6 +36,32 @@ defmodule Llmizer.Chats do
     end
   end
 
+  def add_message_to_chat(chat_id, attrs \\ %{}) do
+    chat = get_chat!(chat_id)
+
+    messages =
+      Enum.map(chat.chat_messages, fn msg ->
+        %{role: msg.role, content: msg.content}
+      end)
+      |> Enum.concat([
+        %{role: "user", content: attrs[:question]}
+      ])
+
+    case @docker_client.get_chat_completions(messages) do
+      {:ok, body} ->
+        response = body[:choices] |> List.first() |> Map.get(:message) |> Map.get(:content)
+
+        chat
+        |> Ecto.Changeset.change()
+        |> Ecto.Changeset.put_assoc(:chat_messages, [
+          %Llmizer.Chats.ChatMessage{content: attrs[:question], role: "user"},
+          %Llmizer.Chats.ChatMessage{content: response, role: "assistant"}
+          | chat.chat_messages
+        ])
+        |> Repo.update()
+    end
+  end
+
   def create_chat(attrs \\ %{}) do
     %Llmizer.Chats.Chat{}
     |> Llmizer.Chats.Chat.changeset(attrs)
