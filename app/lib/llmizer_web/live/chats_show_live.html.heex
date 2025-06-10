@@ -1,20 +1,41 @@
-<div>Your chats</div>
+<div class="grid grid-cols-2 gap-4 grid-cols-[minmax(200px,300px)_1fr] p-4 min-h-screen">
+  <div class="bg-gray-100 rounded-lg">
+    <div class="overflow-y-auto h-full p-2">
+      <div class="pb-2">Your chats</div>
 
-<div>
-  <%= if @chat do %>
-    <div>
-      <h2>{@chat.name}</h2>
-      <ul>
-        <%= for message <- @chat.chat_messages do %>
-          <li><strong>{message.role}:</strong> {message.content}</li>
-        <% end %>
-      </ul>
+      <%= if @chats && Enum.any?(@chats) do %>
+        <div>
+          <%= for chat <- @chats do %>
+            <div class="pb-0.5 hover:bg-sky-700 p-1">
+              <.link href={~p"/chats/#{chat.id}"}>{chat.name}</.link>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <p>No chats available.</p>
+      <% end %>
     </div>
-  <% end %>
-</div>
+  </div>
+  <div class="h-full grid grid-rows-[1fr_auto] max-h-full">
+    <div class="overflow-y-auto h-full">
+      <%= if @chat do %>
+        <div>
+          <h2>{@chat.name}</h2>
+          <ul>
+            <%= for message <- @chat.chat_messages do %>
+              <li><strong>{message.role}:</strong> {message.content}</li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+    </div>
 
-<.live_component
-  module={LlmizerWeb.AddMessageFormComponent}
-  id="add-message-to-chat"
-  form={@form}
-/>
+    <div class="flex-1">
+      <.live_component
+        module={LlmizerWeb.AddMessageFormComponent}
+        id="add-message-to-chat"
+        form={@form}
+      />
+    </div>
+  </div>
+</div>
