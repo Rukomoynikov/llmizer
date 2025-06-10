@@ -5,7 +5,9 @@ defmodule LlmizerWeb.ChatFormComponent do
   def render(assigns) do
     ~H"""
     <div>
-      <h2>New Chat Message</h2>
+      <h2 class="text-base/7 font-semibold text-gray-900">New chat message</h2>
+      <p class="mt-0 mb-0 text-gray-600">Please add title and your question to start new chat with AI :)</p>
+
       <.simple_form
         for={@form}
         phx-change="validate"
@@ -13,8 +15,11 @@ defmodule LlmizerWeb.ChatFormComponent do
         phx-target={@myself}
         id="new-chat-form"
       >
-        <.input field={@form[:content]} label="Message" type="textarea" />
-        <button class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save</button>
+        <.input field={@form[:name]} label="Title" />
+        <.input field={@form[:content]} label="Question" type="textarea" />
+        <:actions>
+          <.button class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save</.button>
+        </:actions>
       </.simple_form>
     </div>
     """
@@ -31,8 +36,8 @@ defmodule LlmizerWeb.ChatFormComponent do
   end
 
   @impl true
-  def handle_event("save", %{"chat_message" => %{"content" => content}}, socket) do
-    case Llmizer.Chats.create_new_chat(%{question: content}) do
+  def handle_event("save", %{"chat_message" => %{"content" => content, "name" => name}}, socket) do
+    case Llmizer.Chats.create_new_chat(%{question: content, name: name}) do
       {:ok, chat} ->
         {:noreply,
          socket

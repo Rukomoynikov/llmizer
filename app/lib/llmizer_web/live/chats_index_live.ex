@@ -22,6 +22,7 @@ defmodule LlmizerWeb.ChatsIndexLive do
   defp new_chat_message_changeset do
     attrs = %{
       content: "",
+      name: "",
       role: "user",
       chat_id: nil
     }

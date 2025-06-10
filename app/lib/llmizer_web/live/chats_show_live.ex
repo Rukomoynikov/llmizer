@@ -10,7 +10,7 @@ defmodule LlmizerWeb.ChatsShowLive do
 
     {:ok,
      socket
-     |> assign(:page_title, "#{chat.name}}")
+     |> assign(:page_title, "#{chat.name}")
      |> assign(:chats, chats)
      |> assign(:chat, chat)
      |> assign(:form, new_chat_message_changeset(chat))}

@@ -5,11 +5,12 @@ defmodule LlmizerWeb.AddMessageFormComponent do
   def render(assigns) do
     ~H"""
     <div>
-      <h2>New Chat Message</h2>
       <.simple_form for={@form} phx-submit="save" phx-target={@myself} id="new-chat-form">
         <input type="hidden" name="chat_id" value={@form[:chat_id].value} />
         <.input field={@form[:content]} label="Message" />
-        <button>Save</button>
+        <:actions>
+          <.button class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save</.button>
+        </:actions>
       </.simple_form>
     </div>
     """

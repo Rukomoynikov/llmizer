@@ -23,7 +23,7 @@ defmodule Llmizer.Chats do
       {:ok, body} ->
         response = body[:choices] |> List.first() |> Map.get(:message) |> Map.get(:content)
 
-        {:ok, chat} = create_chat(%{name: "Simple chat"})
+        {:ok, chat} = create_chat(%{name: attrs[:name]})
 
         chat
         |> Repo.preload(:chat_messages)
